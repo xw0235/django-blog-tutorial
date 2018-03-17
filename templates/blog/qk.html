@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div>
+    千库资源下载链接获取
+    </div>
+    <form action='/qk/' method='POST'>
+    {% csrf_token %}
+    <input type='text' name='url' value='{{ url }}'>
+    <input type='submit' value='获取下载链接'>
+    </form>
+    PSD:<a href='{{ psd_download_url }}'>{{ psd_download_url }}</a>
+    <br>
+    PNG:<a href='{{ png_download_url }}'>{{ png_download_url }}</a>
+{% endblock main %}
