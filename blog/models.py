@@ -108,5 +108,6 @@ class Post(models.Model):
 
         # 调用父类的 save 方法将数据保存到数据库中
         super(Post, self).save(*args, **kwargs)
+        
 class qkCookies(models.Model):
     QQCookies = models.TextField()

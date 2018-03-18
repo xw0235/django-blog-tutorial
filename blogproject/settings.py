@@ -24,7 +24,7 @@ SECRET_KEY = 'i3k%m-808v3_)^h7975iw4v&fl5chq41^19j@u+b*vx7dvw*q$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.xihuxiaozhen.com','xihuxiaozhen.com','gehaibo.win','118.24.112.189']
+ALLOWED_HOSTS = ['www.xihuxiaozhen.com','xihuxiaozhen.com','gehaibo.win','118.24.112.189','127.0.0.1']
 
 # Application definition
 

@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^tag/(?P<pk>[0-9]+)/$', views.TagView.as_view(), name='tag'),
     # url(r'^search/$', views.search, name='search'),
     url(r'^qk/$', views.qk),
-
+    url(r'^wxpost/(?P<pk>[0-9]+)/$',views.getDetail),
+    url(r'^wxlist/$',views.getList)
 ]

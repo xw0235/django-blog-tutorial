@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.utils.text import slugify
+from django.http import JsonResponse
 
 from comments.forms import CommentForm
 from .models import Post, Category, Tag, qkCookies
@@ -14,7 +15,7 @@ from .models import Post, Category, Tag, qkCookies
 import json
 import requests
 from selenium import webdriver
-import time
+import time,datetime
 
 """
 请使用下方的模板引擎方式。
@@ -320,7 +321,31 @@ def search(request):
                                                'post_list': post_list})
 """
 
+def getList(request):
+    tempList = []
+    for i in Post.objects.all():
+        temp = {}
+        temp['id'] = i.id
+        temp['title'] = i.title
+        temp['created_time'] = datetime.datetime.strftime(i.created_time, '%Y-%m-%d %H:%M:%S') 
+        temp['excerpt'] = i.excerpt
+        temp['views'] = i.views
+        temp['category'] = i.category.name
+        temp['author'] = i.author.username
+        tempList.append(temp)
+    return JsonResponse({'postList':tempList})
 
+def getDetail(request,pk):
+    i = Post.objects.get(id = pk)
+    post = {}
+    post['id'] = i.id
+    post['title'] = i.title
+    post['created_time'] = datetime.datetime.strftime(i.created_time, '%Y-%m-%d %H:%M:%S') 
+    post['body'] = i.body
+    post['views'] = i.views
+    post['category'] = i.category.name
+    post['author'] = i.author.username
+    return JsonResponse({'post':post})
 
 
 def qklogin():
