@@ -111,3 +111,12 @@ class Post(models.Model):
         
 class qkCookies(models.Model):
     QQCookies = models.TextField()
+
+
+class avatarImages(models.Model):
+    url = models.TextField()
+
+class wallpaperImages(models.Model):
+    url = models.TextField()
+    
+

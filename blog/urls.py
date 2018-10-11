@@ -12,5 +12,8 @@ urlpatterns = [
     # url(r'^search/$', views.search, name='search'),
     url(r'^qk/$', views.qk),
     url(r'^wxpost/(?P<pk>[0-9]+)/$',views.getDetail),
-    url(r'^wxlist/$',views.getList)
+    url(r'^wxlist/$',views.getList),
+    url(r'^getimgs/$', views.getimgs),
+    url(r'^getavatar/$', views.getavatar),
+    url(r'^getwallpaper/$', views.getwallpaper),
 ]

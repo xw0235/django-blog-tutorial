@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    <div>
-    千库资源下载链接获取
-    </div>
+    <h2>千库资源下载链接获取</h2>
     <form action='/qk/' method='POST'>
     {% csrf_token %}
     <input type='text' name='url' value='{{ url }}'>
@@ -12,4 +10,14 @@
     PSD:<a href='{{ psd_download_url }}'>{{ psd_download_url }}</a>
     <br>
     PNG:<a href='{{ png_download_url }}'>{{ png_download_url }}</a>
+    <br>
+    
+    <h2>抓去微信文章头像和壁纸</h2>
+    <form action='/getimgs/' method='POST'>
+    {% csrf_token %}
+    <input type='text' name='url' value='{{ url }}'>
+    <input type='submit' value='开始抓取'>
+    </form>
+
+
 {% endblock main %}
