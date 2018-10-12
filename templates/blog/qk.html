@@ -15,9 +15,9 @@
     <h2>抓去微信文章头像和壁纸</h2>
     <form action='/getimgs/' method='POST'>
     {% csrf_token %}
-    <input type='text' name='url' value='{{ url }}'>
+    <input type='text' name='src' value='{{ src }}'>
     <input type='submit' value='开始抓取'>
     </form>
-
+    {{ err}}
 
 {% endblock main %}

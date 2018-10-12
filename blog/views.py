@@ -432,40 +432,45 @@ def qk(request):
 
 
 def get_one_page(url):
+    # 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
+    auth = oss2.Auth('LTAIllkspFRf3e1a', '48FaHkoqhyIfo26H3iwTu6dXMgGVQV')
+    # Endpoint以杭州为例，其它Region请按实际情况填写。
+    bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', 'xhxz-img')
+    # requests.get返回的是一个可迭代对象（Iterable），此时Python SDK会通过Chunked Encoding方式上传。
     try:
         response = requests.get(url, verify=False)
         if response.status_code == 200:
             html = response.text
             pattern = re.compile('<img.*?data-src="(.*?)".*?>', re.S)
             pattern2 = re.compile('<h2 class="rich_media_title" id="activity-name">(.*?)</h2>', re.S)
-            title = re.findall(pattern2,html)[0].encode('gbk').strip()
-            items = re.findall(pattern, html)
-            for item in items:
-                print item
-                if 'mmbiz_jpg' in item:
-                    # 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
-                    auth = oss2.Auth('LTAIllkspFRf3e1a', '48FaHkoqhyIfo26H3iwTu6dXMgGVQV')
-                    # Endpoint以杭州为例，其它Region请按实际情况填写。
-                    bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', 'xhxz-img')
+            title = re.findall(pattern2,html)[0].strip()
+            items = re.findall(pattern, html)   
+            
+            if '头像'.decode('utf-8') in title or '情头'.decode('utf-8') in title:
+                for item in items:
+                    print item
+                    if 'mmbiz_jpg' in item:
+                        # 上传oss
+                        input = requests.get(item)
+                        name = 'xhxz_blog/avatar/jpg_' + item.split('/')[4] + '.jpg'
+                        print name
+                        bucket.put_object( name, input)
+                        # 存数据库
+                        avatarImages.objects.create(url='https://xhxz-img.oss-cn-shanghai.aliyuncs.com/'+name)
 
-                    # requests.get返回的是一个可迭代对象（Iterable），此时Python SDK会通过Chunked Encoding方式上传。
-                    input = requests.get(item)
-                    name = title + item.split('/')[4] + '.jpg'
-                    bucket.put_object( name, input)
-                    
-                    # --------------存数据库
-
-                    if '头像' in title or '情头' in title:
-                        print '头像'
-                        avatarImages.objects.create(url='https://xhxz-img.oss-cn-shanghai.aliyuncs.com/xhxz_blog/avatar/'+name)
-
-
-                    elif '壁纸' in title:
-                        print '壁纸'
-                        wallpaperImages.objects.create(url='https://xhxz-img.oss-cn-shanghai.aliyuncs.com/xhxz_blog/wallpaper/'+name)
-                    
-                    else:
-                        print '其它'
+            elif '壁纸'.decode('utf-8') in title:
+                for item in items:
+                    print item
+                    if 'mmbiz_jpg' in item:
+                        # 上传oss
+                        input = requests.get(item)
+                        name = 'xhxz_blog/wallpaper/jpg_' + item.split('/')[4] + '.jpg'
+                        bucket.put_object( name, input)
+                        # 存数据库
+                        wallpaperImages.objects.create(url='https://xhxz-img.oss-cn-shanghai.aliyuncs.com/'+name)
+            
+            else:
+                print '其它'
                     
         return None
     except RequestException:
@@ -474,9 +479,11 @@ def get_one_page(url):
 
 def getimgs(request):
     if request.method == 'POST':
-        url = request.POST['url']
-        get_one_page(url)
-
+        src = request.POST['src']
+        get_one_page(src)
+        return render(request, 'blog/qk.html', context={'src': src,'err' : '获取完成!'})
+    else:
+        return render(request, 'blog/qk.html')
 
 def getavatar(request):
     tempList = []
@@ -485,7 +492,7 @@ def getavatar(request):
         temp['id'] = i.id
         temp['url'] = i.url
         tempList.append(temp)
-    return JsonResponse({'postList':tempList})
+    return JsonResponse({'avatars':tempList})
 
 
 def getwallpaper(request):
@@ -495,4 +502,4 @@ def getwallpaper(request):
         temp['id'] = i.id
         temp['url'] = i.url
         tempList.append(temp)
-    return JsonResponse({'postList':tempList})
+    return JsonResponse({'wallpapers':tempList})
