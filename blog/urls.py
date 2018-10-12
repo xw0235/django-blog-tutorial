@@ -14,6 +14,9 @@ urlpatterns = [
     url(r'^wxpost/(?P<pk>[0-9]+)/$',views.getDetail),
     url(r'^wxlist/$',views.getList),
     url(r'^getimgs/$', views.getimgs),
-    url(r'^getavatar/$', views.getavatar),
-    url(r'^getwallpaper/$', views.getwallpaper),
+    url(r'^getavatar/(?P<pk>[0-9]+)/$', views.getavatar),
+    url(r'^getwallpaper/(?P<pk>[0-9]+)/$', views.getwallpaper),
+    url(r'^delavatar/(?P<pk>[0-9]+)/$', views.delavatar),
+    url(r'^delwallpaper/(?P<pk>[0-9]+)/$', views.delwallpaper),
+    
 ]

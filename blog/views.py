@@ -484,9 +484,9 @@ def getimgs(request):
     else:
         return render(request, 'blog/qk.html')
 
-def getavatar(request):
+def getavatar(request,pk):
     tempList = []
-    for i in avatarImages.objects.all():
+    for i in avatarImages.objects.all().order_by("-id")[((pk-1)*20+1):(pk*20)]:
         temp = {}
         temp['id'] = i.id
         temp['url'] = i.url
@@ -494,11 +494,20 @@ def getavatar(request):
     return JsonResponse({'avatars':tempList})
 
 
-def getwallpaper(request):
+def getwallpaper(request.pk):
     tempList = []
-    for i in wallpaperImages.objects.all():
+    for i in wallpaperImages.objects.all()[((pk-1)*20+1):(pk*20)]:
         temp = {}
         temp['id'] = i.id
         temp['url'] = i.url
         tempList.append(temp)
     return JsonResponse({'wallpapers':tempList})
+
+def delavatar(request,pk):
+    avatarImages.objects.get(id=pk).delete()
+    return JsonResponse({'err':'success'})
+
+
+def delwallpaper(request,pk):
+    wallpaperImages.objects.get(id=pk).delete()
+    return JsonResponse({'err':'success'})
