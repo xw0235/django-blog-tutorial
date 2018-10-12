@@ -453,7 +453,6 @@ def get_one_page(url):
                         # 上传oss
                         input = requests.get(item)
                         name = 'xhxz_blog/avatar/jpg_' + item.split('/')[4] + '.jpg'
-                        print name
                         bucket.put_object( name, input)
                         # 存数据库
                         avatarImages.objects.create(url='https://xhxz-img.oss-cn-shanghai.aliyuncs.com/'+name)
