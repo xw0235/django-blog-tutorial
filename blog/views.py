@@ -486,7 +486,10 @@ def getimgs(request):
 
 def getavatar(request,pk):
     tempList = []
-    for i in avatarImages.objects.all().order_by("-id")[((pk-1)*20+1):(pk*20)]:
+    pk = int(pk)
+    start = (pk-1)*20+1
+    end = pk*20
+    for i in avatarImages.objects.all().order_by("-id")[start:end]:
         temp = {}
         temp['id'] = i.id
         temp['url'] = i.url
@@ -494,9 +497,12 @@ def getavatar(request,pk):
     return JsonResponse({'avatars':tempList})
 
 
-def getwallpaper(request.pk):
+def getwallpaper(request,pk):
     tempList = []
-    for i in wallpaperImages.objects.all()[((pk-1)*20+1):(pk*20)]:
+    pk = int(pk)
+    start = (pk-1)*20+1
+    end = pk*20
+    for i in wallpaperImages.objects.all().order_by("-id")[start:end]:
         temp = {}
         temp['id'] = i.id
         temp['url'] = i.url
