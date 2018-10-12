@@ -487,7 +487,7 @@ def getimgs(request):
 def getavatar(request,pk):
     tempList = []
     pk = int(pk)
-    start = (pk-1)*20+1
+    start = (pk-1)*20
     end = pk*20
     for i in avatarImages.objects.all().order_by("-id")[start:end]:
         temp = {}
@@ -500,7 +500,7 @@ def getavatar(request,pk):
 def getwallpaper(request,pk):
     tempList = []
     pk = int(pk)
-    start = (pk-1)*20+1
+    start = (pk-1)*20
     end = pk*20
     for i in wallpaperImages.objects.all().order_by("-id")[start:end]:
         temp = {}
