@@ -112,11 +112,20 @@ class Post(models.Model):
 class qkCookies(models.Model):
     QQCookies = models.TextField()
 
+class ImgTag(models.Model):
+    
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 
 class avatarImages(models.Model):
     url = models.TextField()
+    downloads = models.PositiveIntegerField(default=0)
+    tags = models.ManyToManyField(ImgTag, blank=True)
 
 class wallpaperImages(models.Model):
     url = models.TextField()
-    
-
+    downloads = models.PositiveIntegerField(default=0)
+    tags = models.ManyToManyField(ImgTag, blank=True)
