@@ -18,5 +18,7 @@ urlpatterns = [
     url(r'^getwallpaper/(?P<pk>[0-9]+)/$', views.getwallpaper),
     url(r'^delavatar/(?P<pk>[0-9]+)/$', views.delavatar),
     url(r'^delwallpaper/(?P<pk>[0-9]+)/$', views.delwallpaper),
-    
+    url(r'^dlavatar/(?P<pk>[0-9]+)/$', views.dlavatar),
+    url(r'^dlwallpaper/(?P<pk>[0-9]+)/$', views.dlwallpaper),
+    url(r'^oss_to_cos/$', views.oss_to_cos),
 ]
