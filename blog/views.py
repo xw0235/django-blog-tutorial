@@ -441,21 +441,21 @@ def qk(request):
 
 
 def get_one_page(url):
-    # oss   https://xhxz-img.oss-cn-shanghai.aliyuncs.com/
-    auth = oss2.Auth('LTAIllkspFRf3e1a', '48FaHkoqhyIfo26H3iwTu6dXMgGVQV')
-    bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', 'xhxz-img')
+    # # oss   https://xhxz-img.oss-cn-shanghai.aliyuncs.com/
+    # auth = oss2.Auth('LTAIllkspFRf3e1a', '48FaHkoqhyIfo26H3iwTu6dXMgGVQV')
+    # bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', 'xhxz-img')
 
-    # # cos 	https://xhxz-1252795282.piccd.myqcloud.com/     https://xhxz-1252795282.image.myqcloud.com/
+    # cos 	https://xhxz-1252795282.piccd.myqcloud.com/     https://xhxz-1252795282.image.myqcloud.com/
 
-    # logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
-    # secret_id = 'AKIDkmgOtB1DvVu7gL7HRRKWbWVXaghXffS4'      
-    # secret_key = 'tw44voz40kHgx3ABHG6j9NOHyTr5B6oK'      
-    # region = 'ap-chengdu'     
-    # token = None                
-    # scheme = 'https'            
-    # config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, Token=token, Scheme=scheme)
-    # client = CosS3Client(config)
+    secret_id = 'AKIDkmgOtB1DvVu7gL7HRRKWbWVXaghXffS4'      
+    secret_key = 'tw44voz40kHgx3ABHG6j9NOHyTr5B6oK'      
+    region = 'ap-chengdu'     
+    token = None                
+    scheme = 'https'            
+    config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, Token=token, Scheme=scheme)
+    client = CosS3Client(config)
     
 
     try:
@@ -474,15 +474,15 @@ def get_one_page(url):
                         name = 'xhxz_blog/avatar/jpg_' + item.split('/')[4] + '.jpg'
                         input = requests.get(item)
                         # 上传oss
-                        bucket.put_object( name, input)
+                        # bucket.put_object( name, input)
                         # # 上传cos
-                        # response = client.put_object(
-                        #     Bucket='xhxz-1252795282',
-                        #     Body=input.content,
-                        #     Key=name,
-                        # )
+                        response = client.put_object(
+                            Bucket='xhxz-1252795282',
+                            Body=input.content,
+                            Key=name,
+                        )
                         # 存数据库
-                        avatarImages.objects.create(url='https://xhxz-img.oss-cn-shanghai.aliyuncs.com/'+name)
+                        avatarImages.objects.create(url='https://xhxz-1252795282.image.myqcloud.com/'+name)
 
             elif '壁纸'.decode('utf-8') in title:
                 for item in items:
@@ -491,15 +491,15 @@ def get_one_page(url):
                         name = 'xhxz_blog/wallpaper/jpg_' + item.split('/')[4] + '.jpg'
                         input = requests.get(item)
                         # 上传oss
-                        bucket.put_object( name, input)
+                        # bucket.put_object( name, input)
                         # # 上传cos
-                        # response = client.put_object(
-                        #     Bucket='xhxz-1252795282',
-                        #     Body=input.content,
-                        #     Key=name,
-                        # )
+                        response = client.put_object(
+                            Bucket='xhxz-1252795282',
+                            Body=input.content,
+                            Key=name,
+                        )
                         # 存数据库
-                        wallpaperImages.objects.create(url='https://xhxz-img.oss-cn-shanghai.aliyuncs.com/'+name)
+                        wallpaperImages.objects.create(url='https://xhxz-1252795282.image.myqcloud.com/'+name)
             
             else:
                 print '其它'
