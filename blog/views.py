@@ -20,6 +20,14 @@ import oss2
 import re
 from requests.exceptions import RequestException
 
+from qcloud_cos import CosConfig
+from qcloud_cos import CosS3Client
+import sys
+import logging
+
+
+
+
 
 """
 请使用下方的模板引擎方式。
@@ -432,11 +440,23 @@ def qk(request):
 
 
 def get_one_page(url):
-    # 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
+    # oss   https://xhxz-img.oss-cn-shanghai.aliyuncs.com/
     auth = oss2.Auth('LTAIllkspFRf3e1a', '48FaHkoqhyIfo26H3iwTu6dXMgGVQV')
-    # Endpoint以杭州为例，其它Region请按实际情况填写。
     bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', 'xhxz-img')
-    # requests.get返回的是一个可迭代对象（Iterable），此时Python SDK会通过Chunked Encoding方式上传。
+
+    # # cos 	https://xhxz-1252795282.piccd.myqcloud.com/     https://xhxz-1252795282.image.myqcloud.com/
+
+    # logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+
+    # secret_id = 'AKIDkmgOtB1DvVu7gL7HRRKWbWVXaghXffS4'      
+    # secret_key = 'tw44voz40kHgx3ABHG6j9NOHyTr5B6oK'      
+    # region = 'ap-chengdu'     
+    # token = None                
+    # scheme = 'https'            
+    # config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, Token=token, Scheme=scheme)
+    # client = CosS3Client(config)
+    
+
     try:
         response = requests.get(url, verify=False)
         if response.status_code == 200:
@@ -450,10 +470,16 @@ def get_one_page(url):
                 for item in items:
                     print item
                     if 'mmbiz_jpg' in item:
-                        # 上传oss
-                        input = requests.get(item)
                         name = 'xhxz_blog/avatar/jpg_' + item.split('/')[4] + '.jpg'
+                        input = requests.get(item)
+                        # 上传oss
                         bucket.put_object( name, input)
+                        # # 上传cos
+                        # response = client.put_object(
+                        #     Bucket='xhxz-1252795282',
+                        #     Body=input.content,
+                        #     Key=name,
+                        # )
                         # 存数据库
                         avatarImages.objects.create(url='https://xhxz-img.oss-cn-shanghai.aliyuncs.com/'+name)
 
@@ -461,10 +487,16 @@ def get_one_page(url):
                 for item in items:
                     print item
                     if 'mmbiz_jpg' in item:
-                        # 上传oss
-                        input = requests.get(item)
                         name = 'xhxz_blog/wallpaper/jpg_' + item.split('/')[4] + '.jpg'
+                        input = requests.get(item)
+                        # 上传oss
                         bucket.put_object( name, input)
+                        # # 上传cos
+                        # response = client.put_object(
+                        #     Bucket='xhxz-1252795282',
+                        #     Body=input.content,
+                        #     Key=name,
+                        # )
                         # 存数据库
                         wallpaperImages.objects.create(url='https://xhxz-img.oss-cn-shanghai.aliyuncs.com/'+name)
             
