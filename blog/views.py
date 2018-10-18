@@ -470,36 +470,34 @@ def get_one_page(url):
             if '头像'.decode('utf-8') in title or '情头'.decode('utf-8') in title:
                 for item in items:
                     print item
-                    if 'mmbiz_jpg' in item:
-                        name = 'xhxz_blog/avatar/jpg_' + item.split('/')[4] + '.jpg'
-                        input = requests.get(item)
-                        # 上传oss
-                        # bucket.put_object( name, input)
-                        # # 上传cos
-                        response = client.put_object(
-                            Bucket='xhxz-1252795282',
-                            Body=input.content,
-                            Key=name,
-                        )
-                        # 存数据库
-                        avatarImages.objects.create(url='https://xhxz-1252795282.image.myqcloud.com/'+name)
+                    name = 'xhxz_blog/avatar/jpg_' + item.split('/')[4] + '.jpg'
+                    input = requests.get(item)
+                    # 上传oss
+                    # bucket.put_object( name, input)
+                    # # 上传cos
+                    response = client.put_object(
+                        Bucket='xhxz-1252795282',
+                        Body=input.content,
+                        Key=name,
+                    )
+                    # 存数据库
+                    avatarImages.objects.create(url='https://xhxz-1252795282.image.myqcloud.com/'+name)
 
-            elif '壁纸'.decode('utf-8') in title:
+            elif '壁纸'.decode('utf-8') in title or 'wallpaper'.decode('utf-8') in title:
                 for item in items:
                     print item
-                    if 'mmbiz_jpg' in item:
-                        name = 'xhxz_blog/wallpaper/jpg_' + item.split('/')[4] + '.jpg'
-                        input = requests.get(item)
-                        # 上传oss
-                        # bucket.put_object( name, input)
-                        # # 上传cos
-                        response = client.put_object(
-                            Bucket='xhxz-1252795282',
-                            Body=input.content,
-                            Key=name,
-                        )
-                        # 存数据库
-                        wallpaperImages.objects.create(url='https://xhxz-1252795282.image.myqcloud.com/'+name)
+                    name = 'xhxz_blog/wallpaper/jpg_' + item.split('/')[4] + '.jpg'
+                    input = requests.get(item)
+                    # 上传oss
+                    # bucket.put_object( name, input)
+                    # # 上传cos
+                    response = client.put_object(
+                        Bucket='xhxz-1252795282',
+                        Body=input.content,
+                        Key=name,
+                    )
+                    # 存数据库
+                    wallpaperImages.objects.create(url='https://xhxz-1252795282.image.myqcloud.com/'+name)
             
             else:
                 print '其它'
