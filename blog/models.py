@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.six import python_2_unicode_compatible
 from django.utils.html import strip_tags
+from django.utils.html import format_html
+
+import datetime
 
 
 # python_2_unicode_compatible 装饰器用于兼容 Python2
@@ -112,6 +115,8 @@ class Post(models.Model):
 class qkCookies(models.Model):
     QQCookies = models.TextField()
 
+
+@python_2_unicode_compatible
 class ImgTag(models.Model):
     
     name = models.CharField(max_length=100)
@@ -124,8 +129,30 @@ class avatarImages(models.Model):
     url = models.TextField()
     downloads = models.PositiveIntegerField(default=0)
     tags = models.ManyToManyField(ImgTag, blank=True)
+    created_time = models.DateTimeField(default=datetime.datetime.now())
+    modified_time = models.DateTimeField(default=datetime.datetime.now())
+
+    def image_data(self):
+        return format_html(
+            '<img src="{}" width="100px"/>',
+            self.url,
+        )
+    image_data.short_description = u'图片'
+    def __str__(self):
+        return self.url
 
 class wallpaperImages(models.Model):
     url = models.TextField()
     downloads = models.PositiveIntegerField(default=0)
     tags = models.ManyToManyField(ImgTag, blank=True)
+    created_time = models.DateTimeField(default=datetime.datetime.now())
+    modified_time = models.DateTimeField(default=datetime.datetime.now())
+
+    def image_data(self):
+        return format_html(
+            '<img src="{}" width="100px"/>',
+            self.url,
+        )
+    image_data.short_description = u'图片'
+    def __str__(self):
+        return self.url

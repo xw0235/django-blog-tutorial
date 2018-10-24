@@ -524,6 +524,11 @@ def getavatar(request,pk):
         temp = {}
         temp['id'] = i.id
         temp['url'] = i.url
+        temp['downloads'] = i.downloads
+        temp_tage = []
+        for j in i.tags.all():
+            temp_tage.append({'id':j.id,'name':j.name})
+        temp['tags'] = temp_tage[:2]
         tempList.append(temp)
     return JsonResponse({'avatars':tempList})
 
@@ -537,62 +542,70 @@ def getwallpaper(request,pk):
         temp = {}
         temp['id'] = i.id
         temp['url'] = i.url
+        temp['downloads'] = i.downloads
+        temp_tage = []
+        for j in i.tags.all():
+            temp_tage.append({'id':j.id,'name':j.name})
+        temp['tags'] = temp_tage[:2]
         tempList.append(temp)
     return JsonResponse({'wallpapers':tempList})
 
-def delavatar(request,pk):
-    avatarImages.objects.get(id=pk).delete()
-    return JsonResponse({'err':'success'})
+# def delavatar(request,pk):
+#     avatarImages.objects.get(id=pk).delete()
+#     return JsonResponse({'err':'success'})
 
 
-def delwallpaper(request,pk):
-    wallpaperImages.objects.get(id=pk).delete()
-    return JsonResponse({'err':'success'})
+# def delwallpaper(request,pk):
+#     wallpaperImages.objects.get(id=pk).delete()
+#     return JsonResponse({'err':'success'})
 
 def dlavatar(request,pk):
     avatarImages.objects.filter(id=pk).update(downloads=F('downloads')+1)
+    avatarImages.objects.filter(id=pk).update(modified_time=datetime.datetime.now())
     return JsonResponse({'err':'success'})
 
 
 def dlwallpaper(request,pk):
     wallpaperImages.objects.filter(id=pk).update(downloads=F('downloads')+1)
+    wallpaperImages.objects.filter(id=pk).update(modified_time=datetime.datetime.now())
     return JsonResponse({'err':'success'})
 
-def oss_to_cos(request):
-    # cos 	https://xhxz-1252795282.piccd.myqcloud.com/     https://xhxz-1252795282.image.myqcloud.com/
 
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+# def oss_to_cos(request):
+#     # cos 	https://xhxz-1252795282.piccd.myqcloud.com/     https://xhxz-1252795282.image.myqcloud.com/
 
-    secret_id = 'AKIDkmgOtB1DvVu7gL7HRRKWbWVXaghXffS4'      
-    secret_key = 'tw44voz40kHgx3ABHG6j9NOHyTr5B6oK'      
-    region = 'ap-chengdu'     
-    token = None                
-    scheme = 'https'            
-    config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, Token=token, Scheme=scheme)
-    client = CosS3Client(config)
+#     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
-    for i in avatarImages.objects.all():
-        input = requests.get(i.url)
-        # 上传cos
-        response = client.put_object(
-            Bucket='xhxz-1252795282',
-            Body=input.content,
-            Key=i.url.replace('https://xhxz-img.oss-cn-shanghai.aliyuncs.com/',''),
-        )
-        i.url = i.url.replace('https://xhxz-img.oss-cn-shanghai.aliyuncs.com/','https://xhxz-1252795282.image.myqcloud.com/')
-        i.save()
+#     secret_id = 'AKIDkmgOtB1DvVu7gL7HRRKWbWVXaghXffS4'      
+#     secret_key = 'tw44voz40kHgx3ABHG6j9NOHyTr5B6oK'      
+#     region = 'ap-chengdu'     
+#     token = None                
+#     scheme = 'https'            
+#     config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, Token=token, Scheme=scheme)
+#     client = CosS3Client(config)
 
-
-    for i in wallpaperImages.objects.all():
-        input = requests.get(i.url)
-        # 上传cos
-        response = client.put_object(
-            Bucket='xhxz-1252795282',
-            Body=input.content,
-            Key=i.url.replace('https://xhxz-img.oss-cn-shanghai.aliyuncs.com/',''),
-        )
-        i.url = i.url.replace('https://xhxz-img.oss-cn-shanghai.aliyuncs.com/','https://xhxz-1252795282.image.myqcloud.com/')
-        i.save()
+#     for i in avatarImages.objects.all():
+#         input = requests.get(i.url)
+#         # 上传cos
+#         response = client.put_object(
+#             Bucket='xhxz-1252795282',
+#             Body=input.content,
+#             Key=i.url.replace('https://xhxz-img.oss-cn-shanghai.aliyuncs.com/',''),
+#         )
+#         i.url = i.url.replace('https://xhxz-img.oss-cn-shanghai.aliyuncs.com/','https://xhxz-1252795282.image.myqcloud.com/')
+#         i.save()
 
 
-    return JsonResponse({'err':'success'})
+#     for i in wallpaperImages.objects.all():
+#         input = requests.get(i.url)
+#         # 上传cos
+#         response = client.put_object(
+#             Bucket='xhxz-1252795282',
+#             Body=input.content,
+#             Key=i.url.replace('https://xhxz-img.oss-cn-shanghai.aliyuncs.com/',''),
+#         )
+#         i.url = i.url.replace('https://xhxz-img.oss-cn-shanghai.aliyuncs.com/','https://xhxz-1252795282.image.myqcloud.com/')
+#         i.save()
+
+
+#     return JsonResponse({'err':'success'})
