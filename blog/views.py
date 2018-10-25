@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.db.models.expressions import F
 
 from comments.forms import CommentForm
-from .models import Post, Category, Tag, qkCookies, avatarImages, wallpaperImages
+from .models import Post, Category, Tag, qkCookies, avatarImages, wallpaperImages, ImgTag
 
 import json
 import requests
