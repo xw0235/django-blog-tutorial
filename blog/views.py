@@ -571,7 +571,7 @@ def dlwallpaper(request,pk):
     return JsonResponse({'err':'success'})
 
 
-def getImgTags(reques):
+def getImgTags(request):
     tempList = []
     for i in ImgTag.objects.all():
         temp = {}
